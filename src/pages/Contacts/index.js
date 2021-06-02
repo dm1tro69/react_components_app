@@ -1,55 +1,45 @@
-import { useState, useEffect } from "react";
-import Paper from "@material-ui/core/Paper";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
+import useContacts from "./useContacts";
+import { Typography } from "@material-ui/core";
+import ContactsTable from "./ContactsTable";
 
-const useContacts = () => {
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const getContacts = async () => {
-      try {
-        setIsLoading(true);
-
-        const response = await fetch("https://randomuser.me/api/?results=200");
-        const { results, error } = await response.json();
-        if (error) {
-          throw new Error(error);
-        }
-        setData(results);
-        setIsError(false);
-      } catch (e) {
-        setIsError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getContacts();
-  }, []);
-  return {
-    data,
-    isError,
-    isLoading,
-  };
-};
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      marginTop: theme.spacing(4),
+    },
+    headContainer: {
+      marginBottom: theme.spacing(3),
+    },
+  })
+);
 
 export const Contacts = () => {
+  const classes = useStyles();
   const contacts = useContacts();
 
-  if (contacts.isLoading) {
-    return <div>...loading</div>;
-  }
-  if (contacts.isError) {
-    return <div>...error</div>;
-  }
-
   return (
-    <Container>
+    <Container className={classes.root}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} className={classes.headContainer}>
+          <Typography variant={"h4"} component={"h1"}>
+            Contacts
+          </Typography>
+        </Grid>
+      </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <div>Contacts {contacts.data[0].name.first}</div>
+          {(() => {
+            if (contacts.isLoading) {
+              return <div>...loading</div>;
+            }
+            if (contacts.isError) {
+              return <div>...error</div>;
+            }
+            return <ContactsTable data={contacts.data} />;
+          })()}
         </Grid>
       </Grid>
     </Container>
