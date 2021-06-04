@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import Box from "@material-ui/core/Box";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
@@ -19,13 +19,34 @@ const useStyles = makeStyles((theme) =>
 
 const CopyToClipboardText = ({ text }) => {
   const classes = useStyles();
-  const [state, copyToClipboard] = useCopyToClipboard();
+  const [, copyToClipboard] = useCopyToClipboard();
+  const [statusCopy, setStatusCopy] = useState("copy");
+  // const tooltipTitle = () => {
+  //   switch (statusCopy) {
+  //     case "copy":
+  //       return "Copy";
+  //     case "copied":
+  //       return "Copied";
+  //     default:
+  //       return "";
+  //   }
+  // };
+  const onClickCopy = useCallback(() => {
+    copyToClipboard(text);
+    setStatusCopy("copied");
+  }, [copyToClipboard, text]);
   return (
+    // <Tooltip title={tooltipTitle} placement={"top"}>
+    //   <Button className={classes.root} onClick={() => copyToClipboard(text)} />
+    //   <FileCopyOutlinedIcon fontSize={"small"} className={classes.icon} />
+    //   {text}
+    // </Tooltip>
     <Box
+      title={"Copy"}
       display={"flex"}
       alignItems={"center"}
       className={classes.root}
-      onClick={() => copyToClipboard(text)}
+      onClick={onClickCopy}
     >
       <FileCopyOutlinedIcon fontSize={"small"} className={classes.icon} />
       {text}

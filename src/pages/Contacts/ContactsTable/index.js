@@ -14,6 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 import CopyToClipboardText from "../../../components/CopyToClipboardText";
+import { NATIONALITIES_HUMAN_NAME } from "../../../constans/nationality";
 
 const useStyles = makeStyles({
   table: {},
@@ -56,8 +57,14 @@ const ContactsTable = ({ data }) => {
               <TableCell>
                 <CopyToClipboardText text={item.email}></CopyToClipboardText>
               </TableCell>
-              <TableCell>6</TableCell>
-              <TableCell>7</TableCell>
+              <TableCell>
+                <Typography>{item.location.country}</Typography>
+                <Typography>
+                  {item.location.city}, {item.location.street.name},{" "}
+                  {item.location.street.number}
+                </Typography>
+              </TableCell>
+              <TableCell>{NATIONALITIES_HUMAN_NAME[item.nat]}</TableCell>
             </TableRow>
           ))}
         </TableBody>
