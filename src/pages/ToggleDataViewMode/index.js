@@ -22,12 +22,14 @@ const ToggleDataViewMode = ({ dataViewMode, setDataViewMode }) => {
       <ToggleButton
         value={DATA_VIEW_MODE.GRID}
         aria-label={DATA_VIEW_MODE.GRID}
+        data-testid={"toggle-data-view-mode-grid"}
       >
         <ViewModuleIcon />
       </ToggleButton>
       <ToggleButton
         value={DATA_VIEW_MODE.TABLE}
         aria-label={DATA_VIEW_MODE.TABLE}
+        data-testid={"toggle-data-view-mode-table"}
       >
         <ViewListIcon />
       </ToggleButton>

@@ -45,16 +45,16 @@ export const Contacts = () => {
         <Grid item xs={12}>
           {(() => {
             if (contacts.isLoading) {
-              return <CircularProgress />;
+              return <CircularProgress data-testid={"contacts-loader"} />;
             }
             if (contacts.isError) {
-              return <div>...error</div>;
+              return <div data-testid={"contacts-error"}>...error</div>;
             }
             if (dataViewMode === DATA_VIEW_MODE.TABLE) {
               return <ContactsTable data={contacts.data} />;
             }
             if (dataViewMode === DATA_VIEW_MODE.GRID) {
-              return "GRID";
+              return <div data-testid={"contacts-grid-container"}>GRID</div>;
             }
             return null;
           })()}
