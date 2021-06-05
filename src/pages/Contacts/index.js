@@ -18,6 +18,7 @@ import ToggleDataViewMode from "../ToggleDataViewMode";
 import { DATA_VIEW_MODE } from "../constans";
 import { useDataViewMode } from "./useDataViewMode";
 import { useState } from "react";
+import { NATIONALITIES_HUMAN_NAME } from "../../constans/nationality";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) =>
 const FiltersDefaultValues = {
   fullname: "",
   gender: "",
+  nationality: "all",
 };
 
 const FilterByFullName = ({ first, last }, fullname) => {
@@ -53,6 +55,13 @@ const filterByGender = (gender, filterGender) => {
     return true;
   }
   return gender === filterGender;
+};
+
+const filterByNationality = (value, nationality) => {
+  if (nationality === "all") {
+    return true;
+  }
+  return value === nationality;
 };
 
 export const Contacts = () => {
@@ -71,7 +80,8 @@ export const Contacts = () => {
 
   const filteredContacts = contacts.data
     .filter((c) => FilterByFullName(c.name, filters.fullname))
-    .filter((c) => filterByGender(c.gender, filters.gender));
+    .filter((c) => filterByGender(c.gender, filters.gender))
+    .filter((c) => filterByNationality(c.nat, filters.nationality));
 
   return (
     <Container className={classes.root}>
@@ -113,6 +123,27 @@ export const Contacts = () => {
                 <MenuItem value={""}>All</MenuItem>
                 <MenuItem value={"male"}>Male</MenuItem>
                 <MenuItem value={"female"}>Female</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl
+              size={"small"}
+              variant="outlined"
+              className={classes.fieldGender}
+            >
+              <InputLabel id="nationality">Nationality</InputLabel>
+              <Select
+                labelId={"nationality"}
+                value={filters.nationality}
+                name={"nationality"}
+                onChange={handleChangeFilter}
+                label="nationality"
+              >
+                <MenuItem value={""}>All</MenuItem>
+                {Object.entries(NATIONALITIES_HUMAN_NAME).map(([key, name]) => (
+                  <MenuItem key={key} value={key}>
+                    {name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
